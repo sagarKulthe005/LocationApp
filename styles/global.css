@@ -1,0 +1,23 @@
+      #map {
+        height: 100%;
+      }
+     
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    
+    .clsTipTitle{
+color:#4B0082;
+font-weight: bold;
+    }
+
+    .clsTipContent{
+    color:#4B0082;	
+    font-weight: normal;
+    }
+
+    #infoWindow{
+    	width:200px;
+    }
