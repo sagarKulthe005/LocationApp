@@ -1,4 +1,5 @@
 /**File contains code to get location using users co-ordinates*/
+
 var map;
 var infowindow;
 var service;
@@ -8,7 +9,7 @@ function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(initMap);
   } else {
-    document.getElementById('demo').innerHTML = "Geolocation is not supported by this browser.";
+    x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
@@ -18,7 +19,7 @@ function initMap(data) {
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: coOrdinate,
-    zoom: 8
+    zoom: 15
   });
 
   infowindow = new google.maps.InfoWindow();
@@ -71,28 +72,38 @@ function createMarker(place) {
         var timing = '';
         var endOfWeek = '';
         var closeDay = '';
+
+        /**get day of the week*/
+        var day = new Date();
+        var dayNumber = day.getDay();
+
+        html += "<span class='clsTipTitle'>Operating Hours: <span><br/>";
+        html += "<table  class='clsTipContent'>"
         for (var count = 0; count < weekData.length; count++) {
           var status = weekData[count].split(":");
-          if (status[1].toLowerCase().trim() === "closed") {
-            closeDay = (closeDay != '') ? closeDay + ',' + status[0] : status[0];
+          /**To highlight todays entry */
+          if (dayNumber == (count + 1)) {
+            if (status.length == 4) {
+              html += "<tr class='clsTipTitle'><td>" + status[0] + "</td><td>" + status[1] + ':' + status[2] + ':' + status[3] + "</td></tr>";
+            }
+            else {
+              html += "<tr class='clsTipTitle'><td>" + status[0] + "</td><td>" + status[1] + "</td></tr>";
+            }
           }
           else {
-            //  startOfWeek = status[0].split('day')[0];
-            timing = status[1] + ':' + status[2] + ':' + status[3];
+            if (status.length == 4) {
+              html += "<tr><td>" + status[0] + "</td><td>" + status[1] + ':' + status[2] + ':' + status[3] + "</td></tr>";
+            }
+            else {
+              html += "<tr><td>" + status[0] + "</td><td>" + status[1] + "</td></tr>";
+            }
           }
         }
-        startOfWeek = 'Mon - Sat';
-        html += "<span class='clsTipTitle'>Operating Hours: <span><br/>";
-        html += "<span class='clsTipContent'>" + startOfWeek + "<br />" + timing + "</span><br/>";
-        if (closeDay !== '') {
-          html += "<span class='clsTipContent'>Closed on " + closeDay + "</span><br/>";
-        }
-
+        html += "</table>";
       }
+      html += "</div>";
 
-      html += "</div>"
-
-
+      /**Create marker */
       var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location
@@ -106,4 +117,3 @@ function createMarker(place) {
   }
 
 }
-
